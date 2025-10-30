@@ -9,6 +9,11 @@ def calculate_hand_value(hand: list[dict]) -> int:
             total_value += 10
         else:
             total_value += int(card['rank'])
+    # START OF THE BONUS
+    for card in hand:
+        if card['rank'] == 'A' and total_value+10 <= 21:
+            total_value += 10
+    # END OF THE BONUS
     return total_value
 
 
@@ -54,15 +59,20 @@ def run_full_game(deck: list[dict], player: dict, dealer: dict) -> None:
             another_player_session = False
             dealer_not_lost = dealer_play(deck, dealer)
     if player_not_lost and dealer_not_lost:
-        player_value = calculate_hand_value(player['hand'])
-        dealer_value = calculate_hand_value(dealer['hand'])
-        print(f"player value : {player_value}")
-        if player_value > dealer_value:
-            print("The total value of the player's cards is higher than that of the dealer \nThe player win !")
-        if dealer_value > player_value:
-            print("The total value of the dealer's cards is higher than that of the player \nThe dealer win !")
-        else:
-            print('Both players reached the same score, \ndraw!')
+        not_lost(player_not_lost, dealer_not_lost, player, dealer)
+
+
+
+def not_lost(player_not_lost, dealer_not_lost, player, dealer):
+    player_value = calculate_hand_value(player['hand'])
+    dealer_value = calculate_hand_value(dealer['hand'])
+    print(f"player value : {player_value}")
+    if player_value > dealer_value:
+        print("The total value of the player's cards is higher that of the dealer \nThe player win !")
+    elif dealer_value > player_value:
+        print("The total value of the dealer's cards is higher that of the player \nThe dealer win !")
+    else:
+        print('Both players reached the same score, \ndraw!')
 
 
 
